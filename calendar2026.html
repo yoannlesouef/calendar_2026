@@ -204,11 +204,20 @@ const SAINTS = {
 };
 
 // Jours feries 2026
-const FERIES = new Set([
-  "2026-01-01","2026-04-05","2026-04-06","2026-05-01","2026-05-08",
-  "2026-05-14","2026-05-25","2026-07-14","2026-08-15","2026-11-01",
-  "2026-11-11","2026-12-25"
-]);
+const FERIES = {
+  "2026-01-01": "Jour de l'An",
+  "2026-04-05": "Pâques",
+  "2026-04-06": "Lundi de Pâques",
+  "2026-05-01": "Fête du Travail",
+  "2026-05-08": "Victoire 1945",
+  "2026-05-14": "Ascension",
+  "2026-05-25": "Pentecôte",
+  "2026-07-14": "Fête nationale",
+  "2026-08-15": "Assomption",
+  "2026-11-01": "Toussaint",
+  "2026-11-11": "Armistice 1918",
+  "2026-12-25": "Noël"
+};
 
 // Dates communes toutes zones
 // Noel 2025-2026: Jan 1-4
@@ -291,7 +300,7 @@ function buildHalf(tableId, startMonth, endMonth) {
       const dow = date.getDay(); // 0=Sun
       const isWeekend = (dow === 0 || dow === 6);
       const dateStr = `2026-${pad(month)}-${pad(d)}`;
-      const isFerie = FERIES.has(dateStr);
+      const isFerie = dateStr in FERIES;
       const vacA = isVacancesA(month, d);
       const vacB = isVacancesB(month, d);
       const vacC = isVacancesC(month, d);
@@ -311,7 +320,7 @@ function buildHalf(tableId, startMonth, endMonth) {
       if (isWeekend) cls.push("weekend");
       if (isFerie) cls.push("ferie");
 
-      const saint = SAINTS[month][d - 1];
+      const saint = isFerie ? FERIES[dateStr] : SAINTS[month][d - 1];
       let weekBadge = "";
       if (isMonday) {
         const wn = getISOWeek(date);
